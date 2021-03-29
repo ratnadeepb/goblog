@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quotes # deployment name
+  labels:
+    app: quotes
+spec:
+  replicas: 1
+  selector: # finding pods to manage
+    matchLabels:
+      app: quotes # pod label must match this
+  template:
+    metadata:
+      labels:
+        app: quotes # pods are given the same label
+    spec:
+      containers: # putting only one container in the pod
+        - name: quotes
+          image: eriklupander/quotes-service
+          ports:
+            - containerPort: 8080
+
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: quotes-pod
+# spec:
+#   containers:
+#     - name: quotes
+#       image: eriklupander/quotes-service
+#       ports:
+#         - containerPort: 8080
+#       livenessProbe:
+#         httpGet:
+#           path: /health
+#           port: 8080

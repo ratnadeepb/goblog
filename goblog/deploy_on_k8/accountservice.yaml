@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accountservice # deployment name
+  labels:
+    app: accountservice
+spec:
+  replicas: 3
+  selector: # finding pods to manage
+    matchLabels:
+      app: accountservice # pod label must match this
+  template:
+    metadata:
+      labels:
+        app: accountservice # pods are given the same label
+    spec:
+      containers: # putting only one container in the pod
+        - name: accountservice
+          image: ratnadeepb/accountservice
+          ports:
+            - containerPort: 6767
+          livenessProbe:
+            httpGet: # 1
+              path: /health # 2
+              port: 6767
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: accountservice-pod
+# spec:
+#   containers:
+#     - name: accountservice
+#       image: ratnadeepb/accountservice
+#       ports:
+#         - containerPort: 6767
+#       livenessProbe:
+#         httpGet: # 1
+#           path: /health # 2
+#           port: 6767
