@@ -1,0 +1,42 @@
+syntax = "proto3";
+package customer;
+
+// protoc -I customer/ customer/customer.proto --go_out=plugins=grpc:customer
+
+// option go_package = "github.com/ratnadeepb/grpc/customer";
+option go_package = "../customer";
+
+// the customer service definition
+service Customer {
+	// get all customers with a filter - a server-to-client streaming RPC
+	rpc GetCustomers (CustomerFilter) returns (stream CustomerRequest) {}
+	// create a new customer - a simple RPC
+	rpc CreateCustomer (CustomerRequest) returns (CustomerResponse) {}
+}
+
+// request message for creating new customer
+message CustomerRequest {
+	int32 id = 1;
+	string name = 2;
+	string email = 3;
+	string phone = 4;
+
+	message Address {
+		string street = 1;
+		string city = 2;
+		string state = 3;
+		string zip = 4;
+		bool isShippingAddress = 5;
+	}
+
+	repeated Address addresses = 5;
+}
+
+message CustomerResponse {
+	int32 id = 1;
+	bool success = 2;
+}
+
+message CustomerFilter {
+	string keyword = 1;
+}
